@@ -8,7 +8,10 @@ class Controller:
         self._model = model
 
     def handle_create_graph(self, e):
-        pass
+        try:
+            n_alb=int(self._view.txtNumAlbumMin)
+        except ValueError:
+            return self.
 
     def handle_connected_artists(self, e):
         pass
