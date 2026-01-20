@@ -46,4 +46,27 @@ nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 plt.savefig("plot")
 plt.show()
 """
+query = """
+        SELECT a1.artist_id, a2.artist_id, count(*) as peso
+        FROM iTunes.album a1, \
+             iTunes.album a2, \
+             iTunes.track t1, \
+             iTunes.track t2
+        where a1.artist_id > a2.artist_id \
+          AND t1.genre_id = t2.genre_id \
+          and a1.artist_id in (SELECT a4.id, \
+                               FROM artist a4, \
+                                    album b \
+                               where a4.id = b.artist_id \
+                               group by a4.id, \
+                               having count(*) > %s) \
+          and a2.artist_id in (SELECT a3.id, \
+                               FROM artist a3, \
+                                    album b2 \
+                               where a3.id = b2.artist_id \
+                               group by a3.id, \
+                               having count(*) > %s)
+        group by a1.artist_id, a2.artist_id \
+        """
+cursor.execute(query, (soglia, soglia))
 
